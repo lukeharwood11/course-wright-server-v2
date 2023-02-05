@@ -6,8 +6,10 @@ const loginSchema = Joi.object({
 });
 
 const createUserSchema = Joi.object({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().email().trim(),
     password: Joi.string().required(),
+    firstName: Joi.string().required().trim(),
+    lastName: Joi.string().required().trim(),
     confirmPassword: Joi.ref("password"),
     // TODO: implement 'type'
 });

@@ -11,22 +11,23 @@ const handleRefreshToken = async (req, res) => {
     if (!cookies?.jwt) return res.sendStatus(401);
     try {
         // check to see if the refresh token is in the database with the correct user
-        const res = await ActiveUser.find({
+        const result = await ActiveUser.find({
             refreshToken: cookies.jwt,
         }).exec();
-        if (res.length === 0)
+        if (result.length === 0)
             return res.status(403).json({
                 message: "Refresh token does not exist in the database.",
             });
 
-        const user = res[0];
+        const activeUser = result[0];
         // verify the jwt and verify that the ids of the found user matches
         jwt.verify(
             cookies.jwt,
             process.env.REFRESH_TOKEN_SECRET,
             (err, decoded) => {
-                if (err || decoded.user.id !== user.userId)
-                    return res.status(403).json({ message: err.message });
+                if (err || decoded.user._id !== activeUser?.user.toString()) {
+                    return res.status(403).json({ message: err });
+                }
                 const { user } = decoded;
                 const accessToken = jwt.sign(
                     { user },
@@ -39,6 +40,7 @@ const handleRefreshToken = async (req, res) => {
             }
         );
     } catch (err) {
+        console.log(err)
         return res.status(500).json({ message: err.message });
     }
 };

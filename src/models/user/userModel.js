@@ -27,7 +27,7 @@ const userSchema = new Schema({
 });
 
 const activeUserSchema = new Schema({
-    userId: { type: Schema.Types.ObjectId, required: true },
+    user: { type: mongoose.ObjectId, required: true },
     refreshToken: { type: String, required: true },
 });
 

@@ -13,15 +13,15 @@ const handleLogin = async (req, res) => {
     // then send a jwt token along with a refresh token
     try {
         // check to see if the user is in the database
-        const users = await userUser.find({ email: value.email });
+        const users = await User.find({ email: value.email });
         if (users.length === 0)
-            res.status(401).json({ message: "Invalid email or password." });
-        const user = rows[0];
+            return res.status(401).json({ message: "Invalid email or password." });
+        const u = users[0];
         // verify that the passwords match
-        const match = await bcrypt.compare(value.password, user.password);
+        const match = await bcrypt.compare(value.password, u.password);
         if (match) {
             debug("Passwords Match!");
-            const { firstName, lastName, _id, type, email } = user;
+            const { firstName, lastName, _id, type, email } = u;
             const user = {
                 firstName,
                 lastName,
@@ -44,12 +44,12 @@ const handleLogin = async (req, res) => {
             query =
                 "INSERT INTO active_user (userId, refreshToken) VALUES (?, ?) ON DUPLICATE KEY UPDATE refreshToken = ?;";
             // ensure no duplicates
-            const _ = await ActiveUser.deleteOne({ userId: user._id }).exec();
+            const _ = await ActiveUser.deleteOne({ user: user._id }).exec();
             const activeUser = new ActiveUser({
-                userId: user._id,
+                user: user._id,
                 refreshToken,
             });
-            const res = await activeUser.save();
+            await activeUser.save();
             // send the refreshToken as a cookie
             // maxAge is equal to 1 day
             debug(refreshToken);
