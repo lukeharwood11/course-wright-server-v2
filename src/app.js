@@ -25,6 +25,8 @@ app.use("/api/logout", require("./routes/logout"));
 
 // protected routes
 app.use(verifyJwt);
+app.use("/api/course", require("./routes/course"));
+app.use("/api/courses", require("./routes/courses"));
 
 // TODO: add an error handler
 // app.use(errorHandler);

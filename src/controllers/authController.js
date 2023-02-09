@@ -41,10 +41,8 @@ const handleLogin = async (req, res) => {
             );
 
             // add the refreshtoken to the database
-            query =
-                "INSERT INTO active_user (userId, refreshToken) VALUES (?, ?) ON DUPLICATE KEY UPDATE refreshToken = ?;";
             // ensure no duplicates
-            const _ = await ActiveUser.deleteOne({ user: user._id }).exec();
+            const _ = await ActiveUser.deleteMany({ user: user._id }).exec();
             const activeUser = new ActiveUser({
                 user: user._id,
                 refreshToken,

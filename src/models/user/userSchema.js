@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const loginSchema = Joi.object({
-    email: Joi.string().required().email(),
+    email: Joi.string().required(),
     password: Joi.string().required(),
 });
 
@@ -11,7 +11,6 @@ const createUserSchema = Joi.object({
     firstName: Joi.string().required().trim(),
     lastName: Joi.string().required().trim(),
     confirmPassword: Joi.ref("password"),
-    // TODO: implement 'type'
 });
 
 module.exports = { loginSchema, createUserSchema };

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 // ex.
 // const userSchema = new Schema({
 //   title:  String, // String is shorthand for {type: String}
@@ -15,7 +14,7 @@ const { Schema } = mongoose;
 // });
 
 // [docs](https://mongoosejs.com/docs/schematypes.html]
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     dateJoined: { type: Date, default: Date.now },
@@ -26,7 +25,7 @@ const userSchema = new Schema({
     photoId: String,
 });
 
-const activeUserSchema = new Schema({
+const activeUserSchema = new mongoose.Schema({
     user: { type: mongoose.ObjectId, required: true },
     refreshToken: { type: String, required: true },
 });
