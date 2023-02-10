@@ -27,11 +27,13 @@ app.use("/api/logout", require("./routes/logout"));
 app.use(verifyJwt);
 app.use("/api/course", require("./routes/course"));
 app.use("/api/courses", require("./routes/courses"));
+app.use("/api/section", require("./routes/section"));
+app.use("/api/sections", require("./routes/sections"));
 
 // TODO: add an error handler
 // app.use(errorHandler);
 
-PORT = process.env.PORT | 8080;
+PORT = process.env.PORT || 8080;
 
 app.listen(PORT, (err) => {
     if (err) console.log("There was an error Launching the server...", err);

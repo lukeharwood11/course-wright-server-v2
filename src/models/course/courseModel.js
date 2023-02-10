@@ -9,8 +9,10 @@ const courseSchema = new mongoose.Schema({
     code: String,
     subject: String,
     photoId: String,
+    color: String,
+    tags: [{ type: String, required: true }],
     visibility: { type: String, required: true },
-    sharing: { type: String, required: true },
+    shareOption: { type: String, required: true },
     access: [
         {
             user: mongoose.ObjectId,

@@ -8,7 +8,7 @@ const {
 const handleGetUserCourses = async (req, res) => {
     const user = req.user;
     try {
-        const courses = await Course.find({ creator: user._id });
+        const courses = await Course.find({ creator: user._id }).exec();
         return res.status(200).json({ courses });
     } catch (err) {
         return res.status(500).json({ message: err?.message });
@@ -25,13 +25,9 @@ const handlePostUserCourse = async (req, res) => {
     const user = req.user;
     const { value, error } = newCourseSchema.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
-    const { name, code, subject, tags } = value;
     try {
         const course = new Course({
-            name,
-            code,
-            subject,
-            tags,
+            ...value,
             creator: user._id,
             access: [{ user: user._id, role: Roles.CREATOR }],
         });
@@ -54,11 +50,10 @@ const handlePatchUserCourse = async (req, res) => {
     const courseId = req.params.id;
     const { value, error } = updateCourseSchema.validate(req.body);
     if (error) return res.status(404).json({ message: error.message });
-    const { name, code, subject, tags, description } = value;
     try {
         const course = await Course.findById(courseId);
         if (!course)
-            return res.send(404).json({ message: "Course does not exist." });
+            return res.status(404).json({ message: "Course does not exist." });
         // check to see if user has permissions to edit
         let permissions = false;
         for (let i = 0; i < course.access.length; ++i) {
@@ -74,7 +69,7 @@ const handlePatchUserCourse = async (req, res) => {
             return res.status(403).json({ message: "Invalid Permissions." });
         const upResult = await Course.updateOne(
             { _id: courseId },
-            { name, code, subject, tags }
+            { ...value }
         );
 
         const returnUpdatedObject = await Course.findById(courseId);
