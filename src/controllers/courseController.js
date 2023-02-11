@@ -16,6 +16,19 @@ const handleGetUserCourses = async (req, res) => {
     // get all courses where the user is
 };
 
+const handleGetCourse = async (req, res) => {
+    const user = req.user;
+
+    try {
+        const course = await Course.findById(req.params.id);
+        if (course.creator.toString() !== user._id)
+            return res.status(404).json({ message: "Invalid course ID." });
+        return res.status(200).json({ course });
+    } catch (err) {
+        return res.status(500).json({ message: err });
+    }
+};
+
 /**
  * Add a new course to the database
  * @param {*} req - contains a body with the course object
@@ -85,4 +98,5 @@ module.exports = {
     handleGetUserCourses,
     handlePostUserCourse,
     handlePatchUserCourse,
+    handleGetCourse
 };
