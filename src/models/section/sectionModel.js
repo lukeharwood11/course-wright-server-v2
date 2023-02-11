@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const { Status, Accessibility } = require("../../data/mappings");
 
 const sectionSchema = new mongoose.Schema({
+    course: { type: mongoose.ObjectId, required: true },
     color: { type: String, required: true },
-    sectionNumber: { type: String, required: true },
+    number: { type: String, required: true },
     creator: { type: mongoose.ObjectId, required: true },
     status: {
         type: String,
