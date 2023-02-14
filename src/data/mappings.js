@@ -5,7 +5,7 @@ const Roles = {
 };
 
 const Status = {
-    IN_PROGRESS: "in progress",
+    IN_PROGRESS: "in-progress",
     CLOSED: "closed",
     OPEN: "open",
     ENDED: "ended",
